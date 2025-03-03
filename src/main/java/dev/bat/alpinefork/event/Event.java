@@ -3,6 +3,12 @@ package dev.bat.alpinefork.event;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * Extendable class for listeners.
+ *
+ * @author Bat
+ */
+
 @Getter
 @Setter
 public abstract class Event extends CancellableEvent{

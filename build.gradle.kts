@@ -18,7 +18,7 @@ val junitVersion by extra { "5.9.3" }
 // removing usage of Unsafe all together in favor of a supported way of accessing private fields/methods.
 val errorproneVersion by extra { "2.10.0" }
 
-group = "com.github.ZeroMemes"
+group = "com.github.BatSleep"
 version = "3.1.1-SNAPSHOT"
 
 java {
@@ -36,7 +36,7 @@ tasks.jar {
     manifest {
         attributes(mapOf(
             "Automatic-Module-Name" to "me.zero.alpine"
-        ), "Alpine")
+        ), "AlpineFork")
     }
 }
 
@@ -107,59 +107,14 @@ fun configureJavaPublication(publication: MavenPublication) = publication.apply 
         }
         developers {
             developer {
-                id.set("ZeroMemes")
-                name.set("Brady Hahn")
-                email.set("zeromemesdev@gmail.com")
+                id.set("BatSleep")
+                name.set("Bat")
+                email.set("github.com/batsleep")
             }
         }
         scm {
             connection.set("scm:git:https://github.com/ZeroMemes/Alpine.git")
             url.set("https://github.com/ZeroMemes/Alpine")
         }
-    }
-}
-
-publishing {
-    publications {
-        create<MavenPublication>("maven") {
-            configureJavaPublication(this)
-        }
-        create<MavenPublication>("gpr") {
-            groupId = "com.github.zeromemes"
-            artifactId = "alpine" // GitHub Packages requires a lowercase artifact id
-            configureJavaPublication(this)
-        }
-    }
-
-    repositories {
-        maven {
-            name = "FileSystem"
-            url = if (System.getenv("MAVEN_DIR") != null) {
-                uri("file://" + System.getenv("MAVEN_DIR"))
-            } else {
-                uri(layout.buildDirectory.dir("repo"))
-            }
-        }
-        maven {
-            name = "GitHubPackages"
-            url = uri("https://maven.pkg.github.com/ZeroMemes/Alpine")
-            credentials {
-                username = System.getenv("GITHUB_ACTOR")
-                password = System.getenv("GITHUB_TOKEN")
-            }
-        }
-    }
-}
-
-tasks.withType<PublishToMavenRepository>().configureEach {
-    onlyIf {
-        repository == publishing.repositories["FileSystem"] && publication == publishing.publications["maven"]
-                || repository == publishing.repositories["GitHubPackages"] && publication == publishing.publications["gpr"]
-    }
-}
-
-tasks.withType<PublishToMavenLocal>().configureEach {
-    onlyIf {
-        publication == publishing.publications["maven"]
     }
 }

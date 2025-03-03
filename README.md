@@ -1,30 +1,14 @@
 <div align="center">
 
-# Alpine
-A lightweight event system for Java 8+
-
-[![Releases][releases-badge]](https://github.com/ZeroMemes/Alpine/releases)
-[![License][license-badge]](/LICENSE)
-[![Status][status-badge]](https://github.com/ZeroMemes/Alpine/actions/workflows/gradle-build.yml)
-[![Coverage][coverage-badge]](https://app.codecov.io/gh/ZeroMemes/Alpine)
-[![Code Size][codesize-badge]](/)
+# AlpineFork
+A lightweight event system for Java 8+ MODIFIED by Bat
+Every class will have an author tag as to who made it
 
 </div>
 
-[releases-badge]: https://img.shields.io/github/v/release/ZeroMemes/Alpine?style=flat-square
-
-[license-badge]: https://img.shields.io/github/license/ZeroMemes/Alpine?style=flat-square
-
-[status-badge]: https://img.shields.io/github/actions/workflow/status/ZeroMemes/Alpine/gradle-build.yml?style=flat-square
-
-[coverage-badge]: https://img.shields.io/codecov/c/github/ZeroMemes/Alpine?style=flat-square
-
-[codesize-badge]: https://img.shields.io/github/languages/code-size/ZeroMemes/Alpine?style=flat-square
-
 ## Setup
 
-The following setup assumes the usage of the [Impact Development Maven](https://impactdevelopment.github.io/maven) repo.
-Alternatively, the [GitHub package](https://github.com/ZeroMemes/Alpine/packages) may be used.
+You need the [Impact Development Maven](https://impactdevelopment.github.io/maven) repo.
 
 ### Gradle
 
@@ -34,24 +18,13 @@ dependencies {
 }
 ```
 
-### Maven
-
-```xml
-
-<dependency>
-    <groupId>com.github.ZeroMemes</groupId>
-    <artifactId>Alpine</artifactId>
-    <version>3.1.0</version>
-</dependency>
-```
-
 ## Tutorial
 
 For starters, we must create an EventBus to handle events and their respective listeners.
 Alpine provides a default implementation of EventBus that is configurable through a builder, so we'll be using that:
 
 ```java
-public class MyApplication {
+public class Example {
 
     public static final EventBus EVENT_BUS = EventManager.builder()
         .setName("my_application/root") // Descriptive name for the bus
@@ -66,8 +39,9 @@ Now to actually receive events that are posted to the event bus, we'll need to c
 generic argument with the type of event we'd like to receive. One of the ways that this can be done by creating a
 `Listener` member variable in a class implementing `Subscriber`, and annotating it with `@Subscribe`. Let's do that
 in our existing class:
+
 ```java
-public class MyApplication implements Subscriber {
+public class Example implements Subscriber {
 
     public static final EventBus EVENT_BUS = ...;
 
@@ -80,12 +54,12 @@ public class MyApplication implements Subscriber {
 In order to use our `Listener`, we need to create a new instance of the `Subscriber` implementation and subscribe
 it to the event bus.
 ```java
-public class MyApplication implements Subscriber {
+public class Example implements Subscriber {
 
     public static final EventBus EVENT_BUS = ...;
 
     public static void main(String[] args) {
-        MyApplication app = new MyApplication();
+        Example app = new Example();
         EVENT_BUS.subscribe(app);
     }
 
@@ -98,7 +72,7 @@ public class MyApplication implements Subscriber {
 An alternative to creating a `Subscriber` implementation and using annotated `Listener` fields to receive events
 is creating an independent `Listener` instance and subscribing it directly:
 ```java
-public class MyApplication {
+public class Example {
 
     public static final EventBus EVENT_BUS = ...;
     
@@ -115,7 +89,7 @@ In cases where a method reference (`::`) is used for a `Listener` body and the u
 `Listener` target, a `ClassCastException` can occur during runtime. This is due to incorrect target resolution, and can
 be fixed by explicitly specifying the target type:
 ```java
-public class MyApplication {
+public class Example {
 
     public static final EventBus EVENT_BUS = ...;
 
@@ -135,12 +109,12 @@ public class MyApplication {
 ```
 Providing our `Listener` with an event, in this case, any `String`, is straight-forward:
 ```java
-public class MyApplication {
+public class Example {
 
     public static final EventBus EVENT_BUS = ...;
 
     public static void main(String[] args) {
-        MyApplication app = new MyApplication();
+        Example app = new Example();
         EVENT_BUS.subscribe(app);
         EVENT_BUS.post("Test");
     }
@@ -155,7 +129,7 @@ public class MyApplication {
 Listeners may have filters applied which must pass in order for the body to receive a given event. A listener can have as
 many filters as is needed, which are added as the last arguments in the `Listener` constructor.
 ```java
-public class MyApplication {
+public class Example {
 
     ...
 

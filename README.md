@@ -26,6 +26,9 @@ dependencies {
 See the original repo to setup the event bus. The main thing added is an extendable ``Event`` class that is used to create listeners.
 
 ```java
+@Getter
+@Setter
+@AllArgsConstructor
 public class EventRender2D extends Event {
     private final ScaledResolution sr;
     private float partialTicks;

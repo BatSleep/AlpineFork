@@ -60,6 +60,9 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
     testImplementation("org.junit.jupiter:junit-jupiter-params:$junitVersion")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
+
+    implementation ("org.projectlombok:lombok:1.18.36")
+    annotationProcessor ("org.projectlombok:lombok:1.18.36")
 }
 
 tasks {

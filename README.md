@@ -17,17 +17,17 @@ You need the Jitpack repo.
 
 ```gradle
 repositories {
-			mavenCentral()
-			maven { url 'https://jitpack.io' }
-		}
+    mavenCentral()
+    maven { url 'https://jitpack.io' }
+}
 ```
 
 Adding the repository.
 
 ```gradle
 dependencies {
-	        implementation 'com.github.BatSleep:AlpineFork:Tag'
-	}
+    implementation 'com.github.BatSleep:AlpineFork:master'
+}
 ```
 
 ## Usage

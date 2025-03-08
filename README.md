@@ -11,14 +11,23 @@ Every class will have an author tag as to who made it
 
 ## Setup
 
-You need the [Impact Development Maven](https://impactdevelopment.github.io/maven) repo.
+You need the Jitpack repo.
 
 ### Gradle
 
 ```gradle
+repositories {
+			mavenCentral()
+			maven { url 'https://jitpack.io' }
+		}
+```
+
+Adding the repository.
+
+```gradle
 dependencies {
-    compile 'com.github.ZeroMemes:Alpine:3.1.0'
-}
+	        implementation 'com.github.BatSleep:AlpineFork:Tag'
+	}
 ```
 
 ## Usage

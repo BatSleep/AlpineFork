@@ -35,6 +35,8 @@ dependencies {
 See the original repo to setup the event bus. The main thing added is an extendable ``Event`` class that is used to create listeners.
 
 ```java
+//Im using lombok with this example
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -44,4 +46,4 @@ public class EventRender2D extends Event {
 }
 ```
 
-All you need to do now is post the event, and you have all the information you need. The Event's Direction, and Phase;
+All you need to do now is post the event, and you have all the information you need + The Event's Direction, and Phase.

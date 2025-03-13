@@ -1,2 +1,1 @@
-rootProject.name = "Alpine"
-include("alpine-example")
+rootProject.name = "AlpineFork"

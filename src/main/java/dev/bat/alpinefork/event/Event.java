@@ -3,6 +3,8 @@ package dev.bat.alpinefork.event;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Optional;
+
 /**
  * Extendable class for listeners.
  *
@@ -13,33 +15,34 @@ import lombok.Setter;
 @Setter
 public abstract class Event extends CancellableEvent{
     
-    private EventPhase phase;
-    private EventDirection dir;
+    private volatile EventPhase phase;
+    private volatile EventDirection dir;
+    
+    private boolean isPhase(EventPhase expectedPhase) {
+        return Optional.ofNullable(phase).map(
+                p -> p == expectedPhase).orElse(false
+        );
+    }
+    
+    private boolean isDirection(EventDirection expectedDir) {
+        return Optional.ofNullable(dir).map(
+                d -> d == expectedDir).orElse(false
+        );
+    }
     
     public boolean isPre() {
-        if (phase == null) return false;
-        return phase == EventPhase.PRE;
-    }
+        return isPhase(EventPhase.PRE);}
     
     public boolean isPost() {
-        if (phase == null) return false;
-        return phase == EventPhase.POST;
-    }
+        return isPhase(EventPhase.POST);}
     
     public boolean isOn() {
-        if (phase == null) return false;
-        return phase == EventPhase.ON;
-    }
+        return isPhase(EventPhase.ON);}
     
     public boolean isIncoming() {
-        if (dir == null) return false;
-        return dir == EventDirection.INCOMING;
-    }
+        return isDirection(EventDirection.INCOMING);}
     
     public boolean isOutgoing() {
-        if (dir == null) return false;
-        return dir == EventDirection.OUTGOING;
-    }
-
-
+        return isDirection(EventDirection.OUTGOING);}
+    
 }

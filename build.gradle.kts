@@ -19,7 +19,7 @@ val junitVersion by extra { "5.9.3" }
 val errorproneVersion by extra { "2.10.0" }
 
 group = "com.github.BatSleep"
-version = "3.1.2-BETA"
+version = "3.2.0-BETA"
 
 java {
     toolchain {

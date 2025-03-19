@@ -6,6 +6,7 @@ import dev.bat.alpinefork.event.Events;
 import dev.bat.alpinefork.exception.EventTypeException;
 import dev.bat.alpinefork.exception.ListenerTargetException;
 import dev.bat.alpinefork.util.Util;
+import lombok.Getter;
 import net.jodah.typetools.TypeResolver;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -47,6 +48,10 @@ import java.util.function.Predicate;
  * @param <T> Target event type
  * @author Brady
  * @since 1.2
+ *
+ * Modified most methods
+ * @author Bat
+ *
  */
 /*
  Even though IntelliJ warns about placing @NotNull on a type parameter here, it is actually sufficient for Kotlin to
@@ -54,7 +59,7 @@ import java.util.function.Predicate;
  */
 public final class Listener<@NotNull T> implements Consumer<T>, Comparable<Listener<?>> {
 
-    private static final Predicate<?>[] EMPTY_FILTERS = new Predicate[0];
+    private static final Predicate<Object>[] EMPTY_FILTERS = new Predicate[0];
 
     /**
      * The type of the target event.
@@ -69,8 +74,16 @@ public final class Listener<@NotNull T> implements Consumer<T>, Comparable<Liste
     /**
      * Priority of this {@link Listener}.
      *
-     * @see EventPriority
+     *
+     * -- GETTER --
+     *  Returns the priority of this
+     * . See
+     *  for a description of this value.
+     *
+     @see EventPriority
+     *
      */
+    @Getter
     private final int priority;
 
     public Listener(@NotNull Consumer<T> callback) {
@@ -125,11 +138,15 @@ public final class Listener<@NotNull T> implements Consumer<T>, Comparable<Liste
         if (target != null) {
             this.target = target;
         } else {
-            final Class<?> resolved = TypeResolver.resolveRawArgument(Consumer.class, callback.getClass());
-            if (resolved == TypeResolver.Unknown.class) {
-                throw new IllegalStateException("Unable to resolve target type from callback");
+            /*
+              Ensures that resolved is actually a Class<?> before casting
+             */
+            final Type resolved = TypeResolver.resolveRawArgument(Consumer.class, callback.getClass());
+            if (resolved instanceof Class<?>) {
+                this.target = (Class<T>) resolved;
+            } else {
+                throw new IllegalStateException("Unable to resolve target type from callback: " + callback.getClass().getName());
             }
-            this.target = (Class<T>) resolved;
         }
     }
 
@@ -143,10 +160,18 @@ public final class Listener<@NotNull T> implements Consumer<T>, Comparable<Liste
      * @throws ListenerTargetException If the existing target isn't assignable from the new target
      */
     public void setTarget(@NotNull Class<T> target) {
+        /*
+        Ensures target is never null.
+         */
+        
+	    Objects.requireNonNull(target, "Target type cannot be null.");
         Events.validateEventType(target);
-        if (!this.target.isAssignableFrom(target)) {
-            throw new ListenerTargetException("Current target type must be assignable from new target type");
+        
+        if (this.target != null && !this.target.isAssignableFrom(target)) {
+            throw new ListenerTargetException("Current target type (" + this.target.getName() +
+                    ") must be assignable from new target type (" + target.getName() + ")");
         }
+        
         this.target = target;
     }
 
@@ -158,18 +183,8 @@ public final class Listener<@NotNull T> implements Consumer<T>, Comparable<Liste
     public @NotNull Class<T> getTarget() {
         return this.target;
     }
-
-    /**
-     * Returns the priority of this {@link Listener}. See {@link EventPriority} for a description of this value.
-     *
-     * @return The priority of this {@link Listener}
-     * @see EventPriority
-     */
-    public int getPriority() {
-        return this.priority;
-    }
-
-    /**
+	
+	/**
      * Called during the event posting sequence. Verifies that the event can be accepted by testing it against this
      * {@link Listener}'s filters, and if so, proceeds with passing the event to this {@link Listener}'s body function.
      *
@@ -182,11 +197,15 @@ public final class Listener<@NotNull T> implements Consumer<T>, Comparable<Liste
 
     @Override
     public int compareTo(@NotNull Listener<?> o) {
-        // Listeners with higher priorities should come first, so negate the compare result
-        return -Integer.compare(this.getPriority(), Objects.requireNonNull(o).getPriority());
+        /*
+        Handles nulls safely
+         */
+        return Integer.compare(o.getPriority(), this.priority);
     }
-
-    @SuppressWarnings("unchecked")
+    
+    /*
+    Used an unchecked cast...
+     */
     private static <T> Predicate<? super T>[] emptyFilters() {
         return (Predicate<? super T>[]) EMPTY_FILTERS;
     }

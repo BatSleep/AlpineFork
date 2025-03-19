@@ -19,7 +19,7 @@ val junitVersion by extra { "5.9.3" }
 val errorproneVersion by extra { "2.10.0" }
 
 group = "com.github.BatSleep"
-version = "3.2.0-BETA"
+version = "3.2.1"
 
 java {
     toolchain {
@@ -37,6 +37,33 @@ tasks.jar {
         attributes(mapOf(
             "Automatic-Module-Name" to "me.zero.alpine"
         ), "AlpineFork")
+    }
+}
+
+tasks.register<Jar>("fatJar") {
+    group = "build"
+    archiveBaseName.set(project.name)
+    archiveClassifier.set("all")
+    archiveVersion.set(version.toString())
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
+    manifest {
+        attributes(
+            "Implementation-Title" to "AlpineFork",
+            "Implementation-Version" to version,
+            "Automatic-Module-Name" to "me.zero.alpine"
+        )
+    }
+
+    from(sourceSets.main.get().output)
+
+    // Include dependencies
+    from({
+        configurations.runtimeClasspath.get().filter { it.name.endsWith("jar") }.map { zipTree(it) }
+    })
+
+    into("META-INF") {
+        from("LICENSE")
     }
 }
 

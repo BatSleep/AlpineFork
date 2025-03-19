@@ -11,24 +11,7 @@ Every class will have an author tag as to who made it
 
 ## Setup
 
-You need the Jitpack repo.
-
-### Gradle
-
-```gradle
-repositories {
-    mavenCentral()
-    maven { url 'https://jitpack.io' }
-}
-```
-
-Adding the repository.
-
-```gradle
-dependencies {
-    implementation 'com.github.BatSleep:AlpineFork:master'
-}
-```
+Download the latest release from `Releases`, and add to your project.
 
 ## Usage
 

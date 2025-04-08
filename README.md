@@ -3,7 +3,7 @@
 # AlpineFork
 A lightweight event system for Java 8+
 
-MODIFIED by Bat
+modernized by Bat
 
 Every class will have an author tag as to who made it
 
